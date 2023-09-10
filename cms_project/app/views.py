@@ -33,7 +33,7 @@ class UserRegistrationView(APIView):
                 response['status'] = "success"
                 response["data"] = serializer.data
             else:
-                response["status"] = "error"
+                response["status"] =   "error"
                 response["http_status"] = HTTP_400_BAD_REQUEST
                 response["data"] = serializer.errors
 
@@ -173,6 +173,7 @@ class DeleteContentView(APIView):
 
 class ContentItemSearchView(APIView):
     def post(self, request):
+        response = {"status": "success", "data": "", "http_status": HTTP_200_OK}
         # Deserialize the search query
         serializer = ContentItemSearchSerializer(data=request.data)
         if serializer.is_valid():
