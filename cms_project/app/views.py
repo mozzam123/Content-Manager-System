@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK,HTTP_201_CREATED
+from rest_framework.status import *
 from .serializers import *
 from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
@@ -86,13 +86,17 @@ class CreateContentView(APIView):
         username = request.data.get('username')
         user_queryset = CustomUser.objects.filter(username=username)
         user = user_queryset.first()
+        print("*******role: ", user.role)
         
         if user.role == 'author':
-            serializer = ContentItemSerializer(data=request.data.get('content'))
+            serializer = CreateContentItemSerializer(data=request.data.get('content'))
+            print("*****serializer ", serializer)
             
             if serializer.is_valid():
+               print("***serilaizer is valid")
                content_item  =  serializer.save(author = user)
-               response["data"] = ContentItemSerializer(content_item).data
+               print("****saved content: ", content_item)
+               response["data"] = CreateContentItemSerializer(content_item).data
         else:
             response["status"] = "error"
             response["data"] = 'Only authors can create content'
@@ -107,7 +111,7 @@ class GetAllContentView(APIView):
         response = {"status": "success", "data": "", "http_status": HTTP_200_OK}
         username = request.data.get('username')
         user_queryset = CustomUser.objects.filter(username=username)
-        user = user_queryset.first()  # Get the first matching user, if any
+        user = user_queryset.first()
 
         if user is not None:
             if user.role == 'admin':
@@ -128,4 +132,42 @@ class GetAllContentView(APIView):
         
         return JsonResponse(response, status=response.get('http_status', HTTP_200_OK))
 
+
+class DeleteContentView(APIView):
+    def post(self, request):
+        try:
+            response = {"status": "success", "data": "", "http_status": HTTP_200_OK}
+            username = request.data.get('username')
+            content_id = request.data.get("content_id")
+
+            user_queryset = CustomUser.objects.filter(username=username)
+            user = user_queryset.first()
+
+            if user is not None:
+                content_item = ContentItem.objects.get(content_id=content_id)
+                
+                if content_item is not None:
+                    if user.role == 'admin' or user == content_item.author:
+                        content_item.delete()
+                        response["status"] = "success"
+                        response["data"] = f"Content delete for {user.role}: {content_item}"
+
+                    else:
+                        response["status"] = "error"
+                else:
+                    response["status"] = "error"
+                    response["data"] = "Content not found"
+            else:
+                response["status"] = "error"
+                response["data"] = "user is not found"
+
+        except Exception as e:
+            response["status"] = "error"
+            response["data"] = e
+
+        return JsonResponse(response, status=response.get('http_status', HTTP_200_OK))
+
+
+
+                    
 

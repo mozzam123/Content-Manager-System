@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+import uuid
 
 
 class CustomUser(AbstractUser):
@@ -33,18 +34,23 @@ class CustomUser(AbstractUser):
 
 
 class ContentItem(models.Model):
+    content_id = models.UUIDField(
+         primary_key = True,
+         default = uuid.uuid4,
+         editable = False)
     title = models.CharField(max_length=30)
     body = models.CharField(max_length=300)
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='contentItem')
 
+
     def __str__(self):
         return self.author.email
 
-    class Meta:
-        permissions = [
-            ("edit_own_content", "Can edit own content"),
-            ("edit_all_content", "Can edit all content"),
-        ] 
+    # class Meta:
+    #     permissions = [
+    #         ("edit_own_content", "Can edit own content"),
+    #         ("edit_all_content", "Can edit all content"),
+    #     ] 
     
 
 
