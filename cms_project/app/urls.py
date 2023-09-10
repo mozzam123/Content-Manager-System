@@ -8,5 +8,7 @@ urlpatterns = [
     path('create', CreateContentView.as_view(), name='create'),  
     path('delete', DeleteContentView.as_view(), name='delete_content'),
     path('search', ContentItemSearchView.as_view(), name='content_search'),
+    path('token', CustomAuthToken.as_view(), name='api_token_auth'),
+
 
 ]

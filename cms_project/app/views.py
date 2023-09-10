@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.status import *
 from .serializers import *
 from django.contrib.auth import authenticate, login
+from rest_framework.authtoken.models import Token
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from rest_framework.authtoken.models import Token
@@ -10,6 +11,13 @@ from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from django.contrib.auth.hashers import make_password
 from rest_framework.decorators import permission_classes
 from .models import *
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.authtoken.views import ObtainAuthToken
+
+class CustomAuthToken(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        response = super(CustomAuthToken, self).post(request, *args, **kwargs)
+        return JsonResponse({"Token": response}) 
 
 
 class UserRegistrationView(APIView):
@@ -50,7 +58,7 @@ class UserLoginView(APIView):
     serializer_class = CustomUserSerializer
 
     def post(self, request):
-        response = {"status": "success", "data": "", "http_status": HTTP_200_OK}
+        response = {"status": "success", "data": "", "http_status":HTTP_200_OK}
 
         # Extract email and password from the request data
         email = request.data.get("email")
@@ -59,12 +67,17 @@ class UserLoginView(APIView):
         if email and password:  # Check if email and password are provided
             # Authenticate the user
             user = authenticate(request=request, username=email, password=password)
-            print("user is : ", user)
 
             if user is not None:
+                # Login the user
                 login(request, user)
+
+                # Create or get a token for the user
+                token, created = Token.objects.get_or_create(user=user)
+
                 response['status'] = "success"
                 response['data'] = "logged in successfully"
+                response['token'] = token.key  # Include the token in the response
             else:
                 response['status'] = "failed"
                 response['data'] = "invalid credentials"
@@ -74,7 +87,7 @@ class UserLoginView(APIView):
             response["http_status"] = HTTP_400_BAD_REQUEST
             response["data"] = "email and password are required"
 
-        return JsonResponse(response, status=response.get('http_status', HTTP_200_OK))
+        return Response(response, status=response.get('http_status',HTTP_200_OK))
 
 
 
@@ -112,6 +125,7 @@ class GetAllContentView(APIView):
         username = request.data.get('username')
         user_queryset = CustomUser.objects.filter(username=username)
         user = user_queryset.first()
+        print('*************',(request.user.is_authenticated))
 
         if user is not None:
             if user.role == 'admin':
@@ -172,6 +186,8 @@ class DeleteContentView(APIView):
                     
 
 class ContentItemSearchView(APIView):
+    authentication_classes = [TokenAuthentication]
+    # permission_classes = [IsAuthenticated]
     def post(self, request):
         response = {"status": "success", "data": "", "http_status": HTTP_200_OK}
         # Deserialize the search query
