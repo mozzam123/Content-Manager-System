@@ -1,16 +1,13 @@
+from .serializers import *
+from .models import *
+from rest_framework.status import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.status import *
-from .serializers import *
 from django.contrib.auth import authenticate, login
 from rest_framework.authtoken.models import Token
 from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
-from rest_framework.authtoken.models import Token
-from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
+from rest_framework.permissions import AllowAny
 from django.contrib.auth.hashers import make_password
-from rest_framework.decorators import permission_classes
-from .models import *
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.views import ObtainAuthToken
 
@@ -26,7 +23,6 @@ class UserRegistrationView(APIView):
     def post(self, request):
         try:
             data = request.data
-            print('Data: ', data)
             response = {"status": "success", "data": "", "http_status": HTTP_201_CREATED} 
             serializer = CustomUserSerializer(data=data)
 
@@ -37,7 +33,6 @@ class UserRegistrationView(APIView):
 
                 # Save the user object
                 user = serializer.save()
-                print("User is: ", user)
                 response['status'] = "success"
                 response["data"] = serializer.data
             else:
@@ -99,16 +94,12 @@ class CreateContentView(APIView):
         username = request.data.get('username')
         user_queryset = CustomUser.objects.filter(username=username)
         user = user_queryset.first()
-        print("*******role: ", user.role)
         
         if user.role == 'author':
             serializer = CreateContentItemSerializer(data=request.data.get('content'))
-            print("*****serializer ", serializer)
             
             if serializer.is_valid():
-               print("***serilaizer is valid")
                content_item  =  serializer.save(author = user)
-               print("****saved content: ", content_item)
                response["data"] = CreateContentItemSerializer(content_item).data
         else:
             response["status"] = "error"
@@ -125,7 +116,6 @@ class GetAllContentView(APIView):
         username = request.data.get('username')
         user_queryset = CustomUser.objects.filter(username=username)
         user = user_queryset.first()
-        print('*************',(request.user.is_authenticated))
 
         if user is not None:
             if user.role == 'admin':
@@ -186,7 +176,7 @@ class DeleteContentView(APIView):
                     
 
 class ContentItemSearchView(APIView):
-    authentication_classes = [TokenAuthentication]
+    # authentication_classes = [TokenAuthentication]
     # permission_classes = [IsAuthenticated]
     def post(self, request):
         response = {"status": "success", "data": "", "http_status": HTTP_200_OK}
