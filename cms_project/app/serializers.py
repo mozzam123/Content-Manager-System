@@ -39,11 +39,14 @@ class CustomUserSerializer(serializers.ModelSerializer):
 class ContentItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContentItem
-        # fields = ['title', 'body']
         fields = '__all__'
 
 class CreateContentItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContentItem
         fields = ['title', 'body']
+
+
+class ContentItemSearchSerializer(serializers.Serializer):
+    query = serializers.CharField(max_length=100)
         

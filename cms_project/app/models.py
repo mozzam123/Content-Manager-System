@@ -34,23 +34,16 @@ class CustomUser(AbstractUser):
 
 
 class ContentItem(models.Model):
-    content_id = models.UUIDField(
-         primary_key = True,
-         default = uuid.uuid4,
-         editable = False)
+    content_id = models.UUIDField(primary_key = True,default = uuid.uuid4,editable = False)
     title = models.CharField(max_length=30)
     body = models.CharField(max_length=300)
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='contentItem')
+    summary = models.CharField(max_length=100, blank=True)
+    category = models.CharField(max_length=20, blank=True)
 
 
     def __str__(self):
         return self.author.email
-
-    # class Meta:
-    #     permissions = [
-    #         ("edit_own_content", "Can edit own content"),
-    #         ("edit_all_content", "Can edit all content"),
-    #     ] 
     
 
 

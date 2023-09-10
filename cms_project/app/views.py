@@ -171,3 +171,26 @@ class DeleteContentView(APIView):
 
                     
 
+class ContentItemSearchView(APIView):
+    def post(self, request):
+        # Deserialize the search query
+        serializer = ContentItemSearchSerializer(data=request.data)
+        if serializer.is_valid():
+            query = serializer.validated_data['query']
+
+            # Perform the search in the database
+            content_items = ContentItem.objects.filter(
+                title__icontains=query
+            ) | ContentItem.objects.filter(
+                body__icontains=query
+            ) | ContentItem.objects.filter(
+                summary__icontains=query
+            ) | ContentItem.objects.filter(
+                category__icontains=query
+            )
+
+            # Serialize the results and return them
+            serializer = ContentItemSerializer(content_items, many=True)
+            return Response(serializer.data, status=HTTP_200_OK)
+
+        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
