@@ -14,9 +14,12 @@ Brief project description goes here.
 - [Contributing](#contributing)
 - [License](#license)
 
+
+
+
 ## About
 
-Provide a short paragraph describing what your project is all about. You can also include any background information or context that's relevant.
+This Django project is a Content Management System (CMS) API that provides the backend functionality for managing and organizing content. The system caters to two types of users: admin and author. Admin users are pre-seeded into the system, while authors can register and log in using their email addresses.
 
 ## Getting Started
 
@@ -28,7 +31,80 @@ List any software, libraries, or tools that users need to have installed before 
 
 - Python 3.x
 - Django 3.x
-- [Other dependencies...]
+- Djangorestframework
+
+## API Endpoints
+
+The following API endpoints are available:
+
+- **User Registration:** `register` (POST)
+- **User Login:** `login` (POST)
+- **List All Content:** `getcontent` (GET)
+- **Create Content:** `create` (POST)
+- **Delete Content:** `delete` (POST)
+- **Search Content:** `search` (POST)
+<br>
+
+**User Registration**
+<br>
+**Body:**
+{
+    "username": "author2",
+    "email": "author2@example.com",
+    "full_name": "John Doe",
+    "password": "Mozzam@123",
+    "phone": "1234567890",
+    "address": "123 Main St",
+    "city": "Your City",
+    "state": "Your State",
+    "country": "Your Country",
+    "pincode": "123456",
+    "role": "author"
+}
+
+
+**User Login**
+<br>
+**Body:** 
+{
+  "email": "author1@example.com",
+  "password": "Mozzam@123"
+}
+
+
+**List All Content**
+<br>
+**Body:**
+{
+    "username": "author2@example.com"
+}
+
+**Create Content**
+<br>
+**Body:**
+{
+    "username": "author2@example.com",
+    "content": {
+        "title": "third title",
+        "body": "third body"
+    }
+}
+
+
+**Delete Content**
+<br>
+**Body:** 
+{
+    "username": "author2@example.com",
+    "content_id": "080f168f-fc16-4e34-b3ad-6ab6dfb29392"
+}
+
+**Search Content**
+<br>
+**Body:**
+{
+    "query": "author2 through api"
+}
 
 ### Installation
 
@@ -36,10 +112,10 @@ Provide step-by-step instructions on how to install your project. You can use co
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/your-project.git
+git clone https://github.com/mozzam123/Content-Manager-System.git
 
 # Navigate to the project directory
-cd your-project
+cd cms_project
 
 # Create a virtual environment (optional but recommended)
 python -m venv venv
@@ -48,32 +124,10 @@ python -m venv venv
 source venv/bin/activate  # On Windows, use "venv\Scripts\activate"
 
 # Install project dependencies
-pip install -r requirements.txt
+pip install -r requirements.txt ```
 
-// Example Request
-POST /register
-{
-  "username": "example_user",
-  "password": "example_password"
-}
 
-// Example Response
-{
-  "status": "success",
-  "data": {
-    "user_id": 123,
-    "username": "example_user"
-  }
-}
 
-We welcome contributions from the community! To contribute to this project, follow these steps:
 
-1. Fork the repository.
-2. Create a new branch for your feature or bug fix.
-3. Make your changes and commit them.
-4. Push your branch to your forked repository.
-5. Create a pull request with a clear description of your changes.
-
-Our team will review your contribution and merge it if it aligns with the project's goals.
 
 
