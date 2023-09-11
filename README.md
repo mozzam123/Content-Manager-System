@@ -36,17 +36,13 @@ List any software, libraries, or tools that users need to have installed before 
 
 The following API endpoints are available:
 
-- **User Registration:** `register` (POST)
-- **User Login:** `login` (POST)
-- **List All Content:** `getcontent` (GET)
-- **Create Content:** `create` (POST)
-- **Delete Content:** `delete` (POST)
-- **Search Content:** `search` (POST)
+
 <br>
 
-**User Registration**
-<br>
+- ## User Registration: `register` (POST)
+
 **Body:**
+```
 {
     "username": "author2",
     "email": "author2@example.com",
@@ -60,27 +56,29 @@ The following API endpoints are available:
     "pincode": "123456",
     "role": "author"
 }
+```
 
+- ## User Login: `login` (POST)
 
-**User Login**
-<br>
 **Body:** 
+```
 {
   "email": "author1@example.com",
   "password": "Mozzam@123"
 }
+```
 
 
-**List All Content**
-<br>
+- ## List All Content: `getcontent` (GET)
 **Body:**
+```
 {
     "username": "author2@example.com"
 }
-
-**Create Content**
-<br>
+```
+- ## Create Content: ## `create` (POST)
 **Body:**
+```
 {
     "username": "author2@example.com",
     "content": {
@@ -88,23 +86,23 @@ The following API endpoints are available:
         "body": "third body"
     }
 }
-
-
-**Delete Content**
-<br>
+```
+- ## Delete Content:##  `delete` (POST)
 **Body:** 
+```
 {
     "username": "author2@example.com",
     "content_id": "080f168f-fc16-4e34-b3ad-6ab6dfb29392"
 }
+```
 
-**Search Content**
-<br>
+- ## Search Content:##  `search` (POST)
 **Body:**
+```
 {
     "query": "author2 through api"
 }
-
+```
 ### Installation
 
 Provide step-by-step instructions on how to install your project. You can use code blocks if necessary.
@@ -123,8 +121,8 @@ python -m venv venv
 source venv/bin/activate  # On Windows, use "venv\Scripts\activate"
 
 # Install project dependencies
-pip install -r requirements.txt ```
-
+pip install -r requirements.txt 
+```
 
 
 
