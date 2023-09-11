@@ -4,35 +4,24 @@
 ## Table of Contents
 
 - [About](#about)
-- [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
-- [Usage](#usage)
 - [Endpoints](#endpoints)
-- [Authentication](#authentication)
-- [Contributing](#contributing)
-- [License](#license)
-
-
+- [Installation](#installation)
 
 
 ## About
 
 This Django project is a Content Management System (CMS) API that provides the backend functionality for managing and organizing content. The system caters to two types of users: admin and author. Admin users are pre-seeded into the system, while authors can register and log in using their email addresses.
 
-## Getting Started
-
-Explain how to get started with your project. What are the prerequisites, and how can someone install it?
 
 ### Prerequisites
-
-List any software, libraries, or tools that users need to have installed before they can use your project. You can also include version requirements.
 
 - Python 3.x
 - Django 3.x
 - Djangorestframework
 
-## API Endpoints
+## Endpoints
 
 The following API endpoints are available:
 
