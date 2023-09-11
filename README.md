@@ -1,6 +1,5 @@
-# Your Project Name
+#  Content Management System (CMS)
 
-Brief project description goes here.
 
 ## Table of Contents
 
