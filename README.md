@@ -94,7 +94,7 @@ The following API endpoints are available:
 ```
 ### Installation
 
-Provide step-by-step instructions on how to install your project. You can use code blocks if necessary.
+Provide step-by-step instructions on how to install your project. You can also use code blocks if necessary.
 
 ```bash
 # Clone the repository
